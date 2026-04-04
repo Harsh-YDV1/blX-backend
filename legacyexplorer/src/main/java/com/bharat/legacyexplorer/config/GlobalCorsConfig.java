@@ -24,9 +24,17 @@ public class GlobalCorsConfig {
             java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
         );
 
-        configuration.setAllowedHeaders(java.util.Arrays.asList("*"));
+        configuration.setAllowedHeaders(
+            java.util.Arrays.asList("Authorization", "Content-Type", "Accept")
+        );
+
+        configuration.setExposedHeaders(
+            java.util.Arrays.asList("Authorization")
+        );
+
         configuration.setAllowCredentials(true);
 
+        // 🔥 THIS PART YOU MISSED
         org.springframework.web.cors.UrlBasedCorsConfigurationSource source =
             new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
 
