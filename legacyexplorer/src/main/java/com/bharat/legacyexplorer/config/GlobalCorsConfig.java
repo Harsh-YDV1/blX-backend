@@ -1,4 +1,4 @@
-package com.bharat.legacy.api.config;
+package com.bharat.legacyexplorer.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
