@@ -7,7 +7,8 @@ import com.bharat.legacyexplorer.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
+@CrossOrigin(origins = "https://blx-fend-1.vercel.app")
 public class AuthController {
     private final UserService userService;
 
