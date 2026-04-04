@@ -16,14 +16,14 @@ public class GlobalCorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")
-                        .allowedOrigins(
-                                "http://localhost:5176",
-                                "http://127.0.0.1:5176",
-                                "https://your-frontend-domain") // replace with your deployed frontend
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
+               registry.addMapping("/**")
+       .allowedOrigins(
+            "http://localhost:5173",
+            "https://blx-fend-1.vercel.app"
+        )
+        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+        .allowedHeaders("*")
+        .allowCredentials(true);
             }
         };
     }
