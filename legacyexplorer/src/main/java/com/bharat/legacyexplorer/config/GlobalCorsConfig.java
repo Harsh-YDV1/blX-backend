@@ -15,8 +15,7 @@ public class GlobalCorsConfig {
 
         configuration.setAllowedOrigins(
             java.util.Arrays.asList(
-                "https://http://localhost:5173
-                ",
+                "https://http://localhost:5173",
                 "https://blx-fend-1.vercel.app",
                 "https://bharatexplorer.vercel.app",
                 "https://indiaxplore.vercel.app"
