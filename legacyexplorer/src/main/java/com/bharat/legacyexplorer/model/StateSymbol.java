@@ -1,9 +1,18 @@
 package com.bharat.legacyexplorer.model;
 
 import jakarta.persistence.Entity;
-
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "state_symbols")
-public class StateSymbol extends BaseNamedEntity {}
+public class StateSymbol extends BaseNamedEntity {
+
+    private String image;
+    private String region;
+
+    public String getImage() { return image; }
+    public void setImage(String image) { this.image = image; }
+
+    public String getRegion() { return region; }
+    public void setRegion(String region) { this.region = region; }
+}
