@@ -2,6 +2,7 @@ package com.bharat.legacyexplorer.model;
 
 import jakarta.persistence.*;
 
+
 @MappedSuperclass
 public abstract class BaseNamedEntity {
     @Id
