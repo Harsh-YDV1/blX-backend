@@ -5,41 +5,50 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class GlobalCorsConfig {
 
     @Bean
-    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
-        org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(
-            java.util.Arrays.asList(
-                "https://localhost:5173/",
-                "https://blx-fend-1.vercel.app",
-                "https://bharatexplorer.vercel.app",
-                "https://indiaxplore.vercel.app"
-            )
-        );
+        // Explicit known origins (production + local dev)
+        configuration.setAllowedOrigins(Arrays.asList(
+            "http://localhost:5173",
+            "http://localhost:3000",
+            "https://blx-fend-1.vercel.app",
+            "https://bharatexplorer.vercel.app",
+            "https://indiaxplore.vercel.app"
+        ));
 
-        configuration.setAllowedMethods(
-            java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
-        );
+        // Wildcard pattern to cover all Vercel preview deployments
+        configuration.setAllowedOriginPatterns(List.of("https://*.vercel.app"));
 
-        configuration.setAllowedHeaders(
-            java.util.Arrays.asList("Authorization", "Content-Type", "Accept")
-        );
+        // All standard HTTP methods including OPTIONS for preflight
+        configuration.setAllowedMethods(Arrays.asList(
+            "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"
+        ));
 
-        configuration.setExposedHeaders(
-            java.util.Arrays.asList("Authorization")
-        );
+        // Allow all request headers so preflight never rejects an unknown header
+        configuration.setAllowedHeaders(List.of("*"));
 
+        // Expose Authorization so the frontend can read the JWT from the response
+        configuration.setExposedHeaders(List.of("Authorization"));
+
+        // Required when the frontend sends cookies or Authorization headers
         configuration.setAllowCredentials(true);
 
-        // 🔥 THIS PART YOU MISSED
-        org.springframework.web.cors.UrlBasedCorsConfigurationSource source =
-            new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
+        // Cache preflight response for 1 hour to reduce OPTIONS round-trips
+        configuration.setMaxAge(3600L);
 
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
@@ -47,9 +56,11 @@ public class GlobalCorsConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+        http
+            .csrf(csrf -> csrf.disable())
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(auth -> auth
+                // Preflight OPTIONS requests must be allowed without authentication
                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().permitAll()
             );

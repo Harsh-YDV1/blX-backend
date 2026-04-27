@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "https://blx-fend-1.vercel.app")
 public class AuthController {
     private final UserService userService;
 
